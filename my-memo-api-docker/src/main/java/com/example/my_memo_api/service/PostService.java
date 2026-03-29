@@ -28,4 +28,17 @@ public class PostService {
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
+
+    public Post updatePost(Long id, Post postDetails) {
+        // 1. まず、指定されたIDのデータがあるか確認（なければエラーを投げる）
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
+        
+        // 2. データがあれば、内容を更新して保存_画面から送られてきた内容（postDetails）で、取得したデータを上書き
+        post.setTitle(postDetails.getTitle());
+        post.setContent(postDetails.getContent());
+
+        // 3. 上書きしたデータを保存（ここで内部的に UPDATE 文が走る）
+        return postRepository.save(post);
+    }
 }

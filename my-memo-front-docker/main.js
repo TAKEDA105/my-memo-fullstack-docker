@@ -15,6 +15,12 @@ async function fetchPosts() {
                 <small style="color: gray;">${post.createdAt || ''}</small>
 
                 <button
+                    onclick="editPost(${post.id})"
+                    style="margin-top: 10px; background-color: #ff4b4b; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                    編集
+                </button>
+
+                <button
                     onclick="deletePost(${post.id})"
                     style="margin-top: 10px; background-color: #ff4b4b; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
                     削除
@@ -94,6 +100,31 @@ window.deletePost = async (id) => {
     } catch (error) {
         console.error("通信エラー:", error);
     }
+},
+
+// 編集用の関数
+window.editPost = async (id) => {
+    const newTitle = prompt("新しいタイトルを入力してください");
+    const newContent = prompt("新しい内容を入力してください");
+
+    if (newTitle == null || newContent == null) {
+        alert("タイトルと内容を入れてください！");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ title: newTitle, content: newContent })
+        });
+        if (response.ok) {
+            fetchPosts();
+        }
+    } catch (error) {
+        console.error("更新失敗:", error);
+    }
 }
+
 
 );

@@ -1,0 +1,13 @@
+# Eclipse 関連
+.metadata/
+.settings/
+.project
+.classpath
+bin/
+
+# Maven 関連
+target/
+
+# OS 関連
+.DS_Store
+Thumbs.db
